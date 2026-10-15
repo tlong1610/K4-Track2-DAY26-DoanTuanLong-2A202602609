@@ -1,6 +1,6 @@
 {
  "version": 1,
- "team": "starter-deck",
+ "team": "DoanTuanLong-2A202602609",
  "cards": [
   {
    "id": "atk_01",
@@ -56,7 +56,7 @@
    },
    "trigger": {
     "on": "call_index",
-    "gte": 2
+    "gte": 1
    }
   },
   {
@@ -170,7 +170,7 @@
    },
    "trigger": {
     "on": "call_index",
-    "gte": 2
+    "gte": 1
    }
   },
   {
@@ -196,7 +196,7 @@
    },
    "trigger": {
     "on": "call_index",
-    "gte": 2
+    "gte": 1
    }
   },
   {
@@ -276,7 +276,7 @@
    },
    "trigger": {
     "on": "call_index",
-    "gte": 2
+    "gte": 1
    }
   },
   {

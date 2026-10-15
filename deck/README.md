@@ -145,16 +145,28 @@ even though it is not literally named `replica_flip` (`validate_deck.py`'s `R5b`
 **`deck/lineup.json`** plays all 10 attacks, none of the 4 blanks, in this order:
 
 ```
-atk_05 (schema_bomb, cheap opener) → atk_01 (shadow) → atk_04 (poisoned_result) →
-atk_08 (forged_card) → atk_03 (drift) → atk_09 (faithless_peer) → atk_06 (header_spoof) →
-atk_02 (replica_flip) → atk_10 (identity/aud) → atk_07 (identity/act, CONTRACTS' own worked case, saved for last)
+r1-3  (x1.0)   atk_05 (schema_bomb) → atk_03 (drift) → atk_09 (faithless_peer)
+r4-7  (x1.25)  atk_04 (poisoned_result) → atk_02 (replica_flip) → atk_06 (header_spoof) → atk_07 (identity/act)
+r8-10 (x1.5)   atk_10 (identity/aud) → atk_01 (shadow) → atk_08 (forged_card)
 ```
 
-Layers alternate deliberately (MCP, MCP, MCP, A2A, MCP, A2A, gateway, gateway, A2A, A2A) so a
-defender who hardens against whatever landed last round is still exposed the next. **Benching
-all 4 blanks is this starter's own aggressive choice, not a rule** — trading an attack for a
-blank, and where in the order to place it, is exactly the strategic lever RULES.md's blank
-mechanic creates. Pull it if your own deck wants to bait a false positive instead.
+**Ordered by measured lethality, not by layer.** Round scale is x1.0 / x1.25 / x1.5, so the same
+verified `enforcement_failure` is worth 50% more in round 9 than in round 2. Measured per card
+against each bot's gateway (5 seeds, our own `eval/prosecute.py` filing), the cards whose declared
+defence is `gateway.denied` AND that slip past even a careful gateway — `forged_card`, `shadow`,
+`identity/aud` — land `enforcement_failure` on all three bots, so they close the duel. The
+non-`gateway.denied` cards (`schema_bomb`, `drift`, `faithless_peer`) can never yield
+`enforcement_failure` — the referee does not charge a forward against them — so they open it,
+where they cost the least. `identity/act` (CONTRACTS' worked case) sits in the x1.25 band: it
+is exactly operator's confused-deputy bug and lands there, but adversary holds it.
+
+**Triggers lowered from `gte: 2` to `gte: 1`** on `atk_02`, `atk_06`, `atk_07`, `atk_10`. A
+defender's agent has a 4-iteration budget; if it reaches the mutated target on call 0 or 1, a
+`gte: 2` trigger never fires and the card is wasted. `gte: 1` still lets one clean call through
+first (so the stack looks safe before it isn't), without betting on a long exchange.
+
+All 4 blanks stay benched: against a disciplined gateway a blank deals nothing, and every slot
+spent on one is a slot not spent on a card that has measured damage behind it.
 
 ---
 
